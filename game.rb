@@ -27,19 +27,22 @@ class Game
   end
 
   def create_deck
+
     numbers = (2..10).to_a
     numbers.push('Jack', 'Queen', 'King', 'Ace')
-    suites = ['of Hearts', 'of Spades', 'of Clubs', 'of Diamonds']
+    suites = ['Hearts', 'Spades', 'Clubs', 'Diamonds']
 
     deck = []
 
     numbers.each do |num|
       suites.each do |suite|
-        deck.push("#{num} #{suite}")
+        card_hash = { card_number: "#{num}", suite: "#{suite}", full_text: "#{num} of #{suite}" }
+        deck.push(card_hash)
       end
     end
 
     return deck.shuffle!
+
   end
 
   def deal_initial_cards
@@ -65,12 +68,68 @@ class Game
 
   def display_board
     puts "Cards left in stock: #{@deck.count}"
-    puts "Player 1: #{@player_1_deck}"
-    puts "Player 2: #{@player_2_deck}"
-    puts "Player 3: #{@player_3_deck}"
-    puts "Player 4: #{@player_4_deck}"
+
+    player_1_deck_display = []
+
+    @player_1_deck.each do |hash|
+      hash.each do |key, value|
+        if key == :full_text
+            player_1_deck_display.push(value)
+        end
+      end
+    end
+
+    player_1_deck_display = player_1_deck_display.join(', ')
+
+    player_2_deck_display = []
+
+    @player_2_deck.each do |hash|
+      hash.each do |key, value|
+        if key == :full_text
+            player_2_deck_display.push(value)
+        end
+      end
+    end
+
+    player_2_deck_display = player_2_deck_display.join(', ')
+
+
+    player_3_deck_display = []
+
+    @player_3_deck.each do |hash|
+      hash.each do |key, value|
+        if key == :full_text
+            player_3_deck_display.push(value)
+        end
+      end
+    end
+
+    player_3_deck_display = player_3_deck_display.join(', ')
+
+
+
+    player_4_deck_display = []
+
+    @player_4_deck.each do |hash|
+      hash.each do |key, value|
+        if key == :full_text
+            player_4_deck_display.push(value)
+        end
+      end
+    end
+
+    player_4_deck_display = player_4_deck_display.join(', ')
+
+
+    puts "Player 1: #{player_1_deck_display}"
+    puts "Player 2: #{player_2_deck_display}"
+    puts "Player 3: #{player_3_deck_display}"
+    puts "Player 4: #{player_4_deck_display}"
+
     puts "It's #{@which_players_turn}'s Turn. Time to go fishing!"
   end
+
+
 
   def display_which_players_turn_it_is
     @which_players_turn = $players[@player_turn_index]
@@ -134,8 +193,20 @@ class Game
       @player_1_deck
     when 'Player 2'
 
-      if @player_2_deck.include?(/#{$which_card_to_be_fished}/)
-        puts "Yes! Player 2 has NUMBER_OF_CARDS #{$which_card_to_be_fished}'s"
+      if @player_2_deck.any? { |hash| hash[:card_number] == $which_card_to_be_fished }
+        correct_card_count = 0
+        @player_2_deck.each do |card|
+
+          if card[:card_number] == $which_card_to_be_fished
+          correct_card_count += 1
+          @player_1_deck.push(@player_2_deck.delete(card))
+          end
+
+        end
+        puts "Yes! Player 2 has #{correct_card_count} #{$which_card_to_be_fished}'s"
+
+        display_board
+
       else
         puts "Sorry, Go Fish!"
         break
@@ -152,6 +223,15 @@ class Game
   end
 
 end
+
+
+
+class Computer
+end
+
+### for computers, allow each computer to 'remember' the last 8 guesses they made (which player and which card)
+
+
 
 x = Game.new
 # puts x.deck
