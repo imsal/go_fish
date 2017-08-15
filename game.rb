@@ -83,47 +83,24 @@ class Game
       @player_turn_index = 0
     end
   end
-  #
-  # def select_player_deck(player)
-    # case player
-    # when 'Player 1'
-    #   return @player_1_deck
-    # when 'Player 2'
-    #   return @player_2_deck
-    # when 'Player 3'
-    #   return @player_3_deck
-    # when 'Player 4'
-    #   return @player_4_deck
-    # end
-  # end
 
   def do_you_have_any_of_type_card
     fishing_player=@which_players_turn
-    # fishing_deck=select_player_deck(fishing_player)
-    # case fishing_player
-    # when 'Player 1'
-    #   return @player_1_deck
-    # when 'Player 2'
-    #   return @player_2_deck
-    # when 'Player 3'
-    #   return @player_3_deck
-    # when 'Player 4'
-    #   return @player_4_deck
-    # end
 
     loop do
 
+    # this loop requires the user to select another player to fish from
     loop do
       puts "Enter a player (E.G. player 3)"
-      player_to_fish_from = $stdin.gets.chomp
-      player_to_fish_from.capitalize!
+      $player_to_fish_from = $stdin.gets.chomp
+      $player_to_fish_from.capitalize!
 
-      unless player_to_fish_from == 'Player 1' || player_to_fish_from == 'Player 2' || player_to_fish_from == 'Player 3' || player_to_fish_from == 'Player 4'
+      unless $player_to_fish_from == 'Player 1' || $player_to_fish_from == 'Player 2' || $player_to_fish_from == 'Player 3' || $player_to_fish_from == 'Player 4'
         puts "Invalid Player Entry."
         redo
       end
 
-      if player_to_fish_from == fishing_player
+      if $player_to_fish_from == fishing_player
         puts "You cannot fish from your own deck!"
         redo
       end
@@ -132,13 +109,13 @@ class Game
 
     end
 
-
+    # this loop requires the user to select a card to fish from
     loop do
       puts "Enter a card (E.G. Jack)"
-      which_card_to_be_fished = $stdin.gets.chomp
-      which_card_to_be_fished.capitalize!
+      $which_card_to_be_fished = $stdin.gets.chomp
+      $which_card_to_be_fished.capitalize!
       card_regex = /2|3|4|5|6|7|8|9|10|(Jack)|(Queen)|(King)|(Ace)/
-      unless card_regex =~ which_card_to_be_fished
+      unless card_regex =~ $which_card_to_be_fished
         puts "Invalid Card Entry."
         redo
       end
@@ -152,11 +129,18 @@ class Game
 
     # if the player guesses correctly, they gain another turn.
 
-    case player_to_fish_from
+    case $player_to_fish_from
     when 'Player 1'
       @player_1_deck
     when 'Player 2'
-      @player_2_deck
+
+      if @player_2_deck.include?(/#{$which_card_to_be_fished}/)
+        puts "Yes! Player 2 has NUMBER_OF_CARDS #{$which_card_to_be_fished}'s"
+      else
+        puts "Sorry, Go Fish!"
+        break
+      end
+
     when 'Player 3'
       @player_3_deck
     when 'Player 4'
