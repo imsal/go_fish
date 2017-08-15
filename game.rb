@@ -85,39 +85,89 @@ class Game
   end
   #
   # def select_player_deck(player)
-  #   case player
-  #   when 'Player 1'
-  #     return @player_1_deck
-  #   when 'Player 2'
-  #     return @player_2_deck
-  #   when 'Player 3'
-  #     return @player_3_deck
-  #   when 'Player 4'
-  #     return @player_4_deck
-  #   end
+    # case player
+    # when 'Player 1'
+    #   return @player_1_deck
+    # when 'Player 2'
+    #   return @player_2_deck
+    # when 'Player 3'
+    #   return @player_3_deck
+    # when 'Player 4'
+    #   return @player_4_deck
+    # end
   # end
 
   def do_you_have_any_of_type_card
     fishing_player=@which_players_turn
     # fishing_deck=select_player_deck(fishing_player)
+    # case fishing_player
+    # when 'Player 1'
+    #   return @player_1_deck
+    # when 'Player 2'
+    #   return @player_2_deck
+    # when 'Player 3'
+    #   return @player_3_deck
+    # when 'Player 4'
+    #   return @player_4_deck
+    # end
 
     loop do
-    puts "Enter a player (E.G. player 3)"
-    player_to_fish_from = $stdin.gets.chomp
-    puts "Enter a card (E.G. Jack)"
-    which_card_to_be_fished = $stdin.gets.chomp
+
+    loop do
+      puts "Enter a player (E.G. player 3)"
+      player_to_fish_from = $stdin.gets.chomp
+      player_to_fish_from.capitalize!
+
+      unless player_to_fish_from == 'Player 1' || player_to_fish_from == 'Player 2' || player_to_fish_from == 'Player 3' || player_to_fish_from == 'Player 4'
+        puts "Invalid Player Entry."
+        redo
+      end
+
+      if player_to_fish_from == fishing_player
+        puts "You cannot fish from your own deck!"
+        redo
+      end
+
+      break
+
+    end
+
+
+    loop do
+      puts "Enter a card (E.G. Jack)"
+      which_card_to_be_fished = $stdin.gets.chomp
+      which_card_to_be_fished.capitalize!
+      card_regex = /2|3|4|5|6|7|8|9|10|(Jack)|(Queen)|(King)|(Ace)/
+      unless card_regex =~ which_card_to_be_fished
+        puts "Invalid Card Entry."
+        redo
+      end
+
+      break
+    end
+
     # player must be holding the type of card they are requesting
 
 
 
     # if the player guesses correctly, they gain another turn.
-    
 
+    case player_to_fish_from
+    when 'Player 1'
+      @player_1_deck
+    when 'Player 2'
+      @player_2_deck
+    when 'Player 3'
+      @player_3_deck
+    when 'Player 4'
+      @player_4_deck
     end
+
+
+  end # end main loop
   end
 
 end
-
 
 x = Game.new
 # puts x.deck
