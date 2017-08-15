@@ -66,65 +66,42 @@ class Game
     end
   end
 
+  def return_player_deck(player)
+    case player
+    when 'Player 1'
+      @player_1_deck
+    when 'Player 2'
+      @player_2_deck
+    when 'Player 3'
+      @player_3_deck
+    when 'Player 4'
+      @player_4_deck
+    end
+  end
+
+
+  def display_player_cards(player)
+    player_deck = return_player_deck(player)
+    player_deck_display = []
+
+    player_deck.each do |hash|
+      hash.each do |key, value|
+        if key == :full_text
+            player_deck_display.push(value)
+        end
+      end
+    end
+
+    return player_deck_display.join(', ')
+  end
+
   def display_board
     puts "Cards left in stock: #{@deck.count}"
 
-    player_1_deck_display = []
-
-    @player_1_deck.each do |hash|
-      hash.each do |key, value|
-        if key == :full_text
-            player_1_deck_display.push(value)
-        end
-      end
-    end
-
-    player_1_deck_display = player_1_deck_display.join(', ')
-
-    player_2_deck_display = []
-
-    @player_2_deck.each do |hash|
-      hash.each do |key, value|
-        if key == :full_text
-            player_2_deck_display.push(value)
-        end
-      end
-    end
-
-    player_2_deck_display = player_2_deck_display.join(', ')
-
-
-    player_3_deck_display = []
-
-    @player_3_deck.each do |hash|
-      hash.each do |key, value|
-        if key == :full_text
-            player_3_deck_display.push(value)
-        end
-      end
-    end
-
-    player_3_deck_display = player_3_deck_display.join(', ')
-
-
-
-    player_4_deck_display = []
-
-    @player_4_deck.each do |hash|
-      hash.each do |key, value|
-        if key == :full_text
-            player_4_deck_display.push(value)
-        end
-      end
-    end
-
-    player_4_deck_display = player_4_deck_display.join(', ')
-
-
-    puts "Player 1: #{player_1_deck_display}"
-    puts "Player 2: #{player_2_deck_display}"
-    puts "Player 3: #{player_3_deck_display}"
-    puts "Player 4: #{player_4_deck_display}"
+    puts "Player 1: #{display_player_cards('Player 1')}"
+    puts "Player 2: #{display_player_cards('Player 2')}"
+    puts "Player 3: #{display_player_cards('Player 3')}"
+    puts "Player 4: #{display_player_cards('Player 4')}"
 
     puts "It's #{@which_players_turn}'s Turn. Time to go fishing!"
   end
